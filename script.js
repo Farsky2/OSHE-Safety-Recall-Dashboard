@@ -11,43 +11,53 @@ const pageSize = 10;
 // ON PAGE LOAD INITIALIZATION
 window.onload = function() {
     // Bind listeners for Step 1 Configuration Inputs
-    document.getElementById('inputPenandatanganOSHE').addEventListener('input', updateSignatures);
-    document.getElementById('inputPenandatanganGM').addEventListener('input', updateSignatures);
+    const inputOSHE = document.getElementById('inputPenandatanganOSHE');
+    const inputGM = document.getElementById('inputPenandatanganGM');
+    
+    if (inputOSHE) inputOSHE.addEventListener('input', updateSignatures);
+    if (inputGM) inputGM.addEventListener('input', updateSignatures);
     
     // Bind Drag & Drop Events
     const dropZone = document.getElementById('dropZone');
     const fileInput = document.getElementById('fileInput');
 
-    dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.classList.add('bg-amber-100', 'border-amber-500');
-    });
+    if (dropZone && fileInput) {
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('bg-amber-100', 'border-amber-500');
+        });
 
-    dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('bg-amber-100', 'border-amber-500');
-    });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('bg-amber-100', 'border-amber-500');
+        });
 
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('bg-amber-100', 'border-amber-500');
-        if (e.dataTransfer.files.length > 0) {
-            fileInput.files = e.dataTransfer.files;
-            handleFileUpload(e.dataTransfer.files[0]);
-        }
-    });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('bg-amber-100', 'border-amber-500');
+            if (e.dataTransfer.files.length > 0) {
+                fileInput.files = e.dataTransfer.files;
+                handleFileUpload(e.dataTransfer.files[0]);
+            }
+        });
 
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-            handleFileUpload(e.target.files[0]);
-        }
-    });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileUpload(e.target.files[0]);
+            }
+        });
+    }
 
     updateSignatures();
 };
 
 function updateSignatures() {
-    document.getElementById('signNameOSHE').innerText = document.getElementById('inputPenandatanganOSHE').value || 'M. Harris Domili';
-    document.getElementById('signNameGM').innerText = document.getElementById('inputPenandatanganGM').value || 'Nama General Manager';
+    const osheElem = document.getElementById('signNameOSHE');
+    const gmElem = document.getElementById('signNameGM');
+    const inputOSHE = document.getElementById('inputPenandatanganOSHE');
+    const inputGM = document.getElementById('inputPenandatanganGM');
+
+    if (osheElem && inputOSHE) osheElem.innerText = inputOSHE.value || 'M. Harris Domili';
+    if (gmElem && inputGM) gmElem.innerText = inputGM.value || 'Nama General Manager';
 }
 
 function prosesSimulasiDemo() {
@@ -71,12 +81,11 @@ function prosesSimulasiDemo() {
         const dept = demoDepts[idx % demoDepts.length];
         const topik = demoTopics[idx % demoTopics.length];
         
-        // Simulate realistic retry/remidi behavior
-        const attempts = Math.floor(Math.random() * 3) + 1; // 1, 2, or 3
+        const attempts = Math.floor(Math.random() * 3) + 1; 
         let score = 0;
 
         if (attempts === 1) {
-            score = Math.floor(Math.random() * 20) + 80; // 80 - 100
+            score = Math.floor(Math.random() * 20) + 80; 
         } else if (attempts === 2) {
             score = Math.random() > 0.2 ? Math.floor(Math.random() * 15) + 80 : Math.floor(Math.random() * 20) + 55;
         } else {
@@ -111,12 +120,10 @@ function handleFileUpload(file) {
             const data = new Uint8Array(e.target.result);
             const workbook = XLSX.read(data, { type: 'array' });
 
-            let jsonRows = [];
-            workbook.SheetNames.forEach(sheetName => {
-                const worksheet = workbook.Sheets[sheetName];
-                const sheetData = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
-                jsonRows = jsonRows.concat(sheetData);
-            });
+            // Otomatis pilih sheet 'Log Peserta' jika ada, jika tidak ambil sheet pertama
+            let targetSheetName = workbook.SheetNames.find(name => name.toLowerCase().includes('log peserta')) || workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[targetSheetName];
+            const jsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
 
             if (!jsonRows || jsonRows.length === 0) {
                 showAlert('File Excel kosong atau format tidak sesuai.', 'error');
@@ -142,9 +149,9 @@ function handleFileUpload(file) {
                 const nik = findVal(['nik', 'id', 'no', 'nrp'], 'NIK-' + (2000 + index));
                 const site = findVal(['site', 'lokasi', 'project', 'cabang'], 'Site Utama');
                 const dept = findVal(['dept', 'departemen', 'divisi', 'department'], 'OSHE');
-                const topik = findVal(['topik', 'materi', 'evaluasi', 'modul'], 'Safety Recall');
+                const topik = findVal(['topik', 'materi', 'evaluasi', 'modul', 'quiz'], 'Safety Recall');
                 
-                let skor = parseFloat(findVal(['skor', 'nilai', 'score', 'hasil'], 0));
+                let skor = parseFloat(findVal(['skor', 'nilai', 'score', 'hasil', 'percentage'], 0));
                 if (isNaN(skor)) skor = 0;
 
                 let attempts = parseInt(findVal(['percobaan', 'remidi', 'ulang', 'attempt', 'kali'], 1));
@@ -158,21 +165,22 @@ function handleFileUpload(file) {
                 }
 
                 return {
-                    nik: nik,
-                    nama: nama,
-                    site: site,
-                    dept: dept,
-                    topik: topik,
+                    nik: String(nik),
+                    nama: String(nama),
+                    site: String(site),
+                    dept: String(dept),
+                    topik: String(topik),
                     skor: skor,
                     attempts: attempts,
                     status: status
                 };
             });
 
-            const filteredMappedData = mappedData.filter(d => !d.nama.startsWith('Peserta ') || d.skor > 0);
+            // Filter baris kosong
+            const filteredMappedData = mappedData.filter(d => d.nama && d.nama.trim() !== '' && !d.nama.startsWith('Peserta '));
 
             rawDataset = filteredMappedData;
-            showAlert('File Excel ' + file.name + ' berhasil di-parsing (' + filteredMappedData.length + ' baris data)!', 'success');
+            showAlert('File Excel ' + file.name + ' berhasil di-parsing (' + filteredMappedData.length + ' baris data dari sheet "' + targetSheetName + '")!', 'success');
             processDataset();
 
         } catch (err) {
@@ -185,6 +193,8 @@ function handleFileUpload(file) {
 
 function showAlert(msg, type) {
     const alertBox = document.getElementById('statusAlert');
+    if (!alertBox) return;
+
     alertBox.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'bg-rose-100', 'text-rose-800', 'bg-amber-100', 'text-amber-800');
     
     if (type === 'success') {
@@ -207,9 +217,10 @@ function processDataset() {
 function populateDropdownFilters() {
     const siteSelect = document.getElementById('filterSite');
     const deptSelect = document.getElementById('filterDept');
+    if (!siteSelect || !deptSelect) return;
 
-    const uniqueSites = [...new Set(rawDataset.map(d => d.site))].sort();
-    const uniqueDepts = [...new Set(rawDataset.map(d => d.dept))].sort();
+    const uniqueSites = [...new Set(rawDataset.map(d => d.site))].filter(Boolean).sort();
+    const uniqueDepts = [...new Set(rawDataset.map(d => d.dept))].filter(Boolean).sort();
 
     siteSelect.innerHTML = '<option value="ALL">Semua Site (' + uniqueSites.length + ')</option>';
     uniqueSites.forEach(s => {
@@ -223,13 +234,17 @@ function populateDropdownFilters() {
 }
 
 function applyFilters() {
-    const searchText = document.getElementById('filterSearch').value.toLowerCase();
-    const selectedSite = document.getElementById('filterSite').value;
-    const selectedDept = document.getElementById('filterDept').value;
-    const selectedStatus = document.getElementById('filterStatus').value;
+    const searchInput = document.getElementById('filterSearch');
+    const siteInput = document.getElementById('filterSite');
+    const deptInput = document.getElementById('filterDept');
+    const statusInput = document.getElementById('filterStatus');
+
+    const searchText = searchInput ? searchInput.value.toLowerCase() : '';
+    const selectedSite = siteInput ? siteInput.value : 'ALL';
+    const selectedDept = deptInput ? deptInput.value : 'ALL';
+    const selectedStatus = statusInput ? statusInput.value : 'ALL';
 
     filteredDataset = rawDataset.filter(item => {
-        // Konversi nilai nama dan nik ke string untuk mencegah error pada angka murni
         const namaStr = String(item.nama || '').toLowerCase();
         const nikStr = String(item.nik || '').toLowerCase();
         
@@ -277,13 +292,18 @@ function updateMetricsScorecard() {
         }
     }
 
-    document.getElementById('statTotalPeserta').innerText = total;
-    document.getElementById('statTotalLulus').innerText = lulusCount;
-    document.getElementById('statTotalRemidi').innerText = remidiCount;
-    document.getElementById('statPassRate').innerText = passRate + '%';
-    document.getElementById('statSiteRemidiTop').innerText = topRemidiSite;
-    document.getElementById('statSiteRemidiCount').innerText = maxRemidi + ' Peserta Mengulang';
-    document.getElementById('labelTotalRecords').innerText = 'Data Terisi: ' + total + ' Peserta';
+    const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = val;
+    };
+
+    setVal('statTotalPeserta', total);
+    setVal('statTotalLulus', lulusCount);
+    setVal('statTotalRemidi', remidiCount);
+    setVal('statPassRate', passRate + '%');
+    setVal('statSiteRemidiTop', topRemidiSite);
+    setVal('statSiteRemidiCount', maxRemidi + ' Peserta Mengulang');
+    setVal('labelTotalRecords', 'Data Terisi: ' + total + ' Peserta');
 }
 
 function renderCharts() {
@@ -303,37 +323,40 @@ function renderCharts() {
     const lulusData = siteLabels.map(s => siteMap[s].lulus);
     const remidiData = siteLabels.map(s => siteMap[s].remidi);
 
-    const ctx1 = document.getElementById('chartSiteComparison').getContext('2d');
-    if (chartInstanceSite) chartInstanceSite.destroy();
+    const canvasSite = document.getElementById('chartSiteComparison');
+    if (canvasSite) {
+        const ctx1 = canvasSite.getContext('2d');
+        if (chartInstanceSite) chartInstanceSite.destroy();
 
-    chartInstanceSite = new Chart(ctx1, {
-        type: 'bar',
-        data: {
-            labels: siteLabels,
-            datasets: [
-                {
-                    label: 'Lulus (≥80%)',
-                    data: lulusData,
-                    backgroundColor: '#10B981'
-                },
-                {
-                    label: 'Remidi (<80%)',
-                    data: remidiData,
-                    backgroundColor: '#EF4444'
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'top' }
+        chartInstanceSite = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: siteLabels,
+                datasets: [
+                    {
+                        label: 'Lulus (≥80%)',
+                        data: lulusData,
+                        backgroundColor: '#10B981'
+                    },
+                    {
+                        label: 'Remidi (<80%)',
+                        data: remidiData,
+                        backgroundColor: '#EF4444'
+                    }
+                ]
             },
-            scales: {
-                y: { beginAtZero: true, ticks: { precision: 0 } }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' }
+                },
+                scales: {
+                    y: { beginAtZero: true, ticks: { precision: 0 } }
+                }
             }
-        }
-    });
+        });
+    }
 
     let attempt1Count = 0;
     let attempt2Count = 0;
@@ -345,30 +368,34 @@ function renderCharts() {
         else attempt3PlusCount++;
     });
 
-    const ctx2 = document.getElementById('chartRemidiCount').getContext('2d');
-    if (chartInstanceRemidi) chartInstanceRemidi.destroy();
+    const canvasRemidi = document.getElementById('chartRemidiCount');
+    if (canvasRemidi) {
+        const ctx2 = canvasRemidi.getContext('2d');
+        if (chartInstanceRemidi) chartInstanceRemidi.destroy();
 
-    chartInstanceRemidi = new Chart(ctx2, {
-        type: 'doughnut',
-        data: {
-            labels: ['Percobaan 1x (Langsung Lulus)', 'Percobaan 2x (Remidi 1x)', 'Percobaan 3x+ (Remidi ≥2x)'],
-            datasets: [{
-                data: [attempt1Count, attempt2Count, attempt3PlusCount],
-                backgroundColor: ['#10B981', '#F59E0B', '#EF4444']
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'bottom' }
+        chartInstanceRemidi = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Percobaan 1x (Langsung Lulus)', 'Percobaan 2x (Remidi 1x)', 'Percobaan 3x+ (Remidi ≥2x)'],
+                datasets: [{
+                    data: [attempt1Count, attempt2Count, attempt3PlusCount],
+                    backgroundColor: ['#10B981', '#F59E0B', '#EF4444']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 function renderTable() {
     const tableBody = document.getElementById('tableBody');
+    if (!tableBody) return;
     tableBody.innerHTML = '';
 
     if (filteredDataset.length === 0) {
@@ -378,8 +405,10 @@ function renderTable() {
                     Tidak ada data yang sesuai dengan filter pencarian.
                 </td>
             </tr>`;
-        document.getElementById('paginationInfo').innerText = 'Menampilkan 0 data';
-        document.getElementById('paginationControls').innerHTML = '';
+        const pagInfo = document.getElementById('paginationInfo');
+        const pagCtrl = document.getElementById('paginationControls');
+        if (pagInfo) pagInfo.innerText = 'Menampilkan 0 data';
+        if (pagCtrl) pagCtrl.innerHTML = '';
         return;
     }
 
@@ -431,7 +460,8 @@ function renderTable() {
         tableBody.appendChild(tr);
     });
 
-    document.getElementById('paginationInfo').innerText = `Menampilkan ${startIndex + 1} - ${endIndex} dari ${filteredDataset.length} data`;
+    const pagInfo = document.getElementById('paginationInfo');
+    if (pagInfo) pagInfo.innerText = `Menampilkan ${startIndex + 1} - ${endIndex} dari ${filteredDataset.length} data`;
     
     let navHtml = '';
     navHtml += `<button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} class="px-2.5 py-1 bg-white border border-slate-300 rounded text-xs disabled:opacity-50">Prev</button>`;
@@ -445,7 +475,9 @@ function renderTable() {
     }
     
     navHtml += `<button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} class="px-2.5 py-1 bg-white border border-slate-300 rounded text-xs disabled:opacity-50">Next</button>`;
-    document.getElementById('paginationControls').innerHTML = navHtml;
+    
+    const pagCtrl = document.getElementById('paginationControls');
+    if (pagCtrl) pagCtrl.innerHTML = navHtml;
 }
 
 function changePage(page) {
