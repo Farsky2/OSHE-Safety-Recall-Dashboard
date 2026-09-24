@@ -11,7 +11,7 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Script Konfigurasi Tailwind (Harus tetap di HTML untuk pengaturan warna kustom CDN) -->
+    <!-- Script Konfigurasi Tailwind -->
     <script>
         tailwind.config = {
             theme: {
@@ -44,9 +44,8 @@
         <!-- Logo Header -->
         <div class="p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="bg-amber-400 text-slate-950 font-black text-xl px-2.5 py-1 rounded shadow tracking-wider border border-amber-300">
-                    BAS
-                </div>
+                <!-- LOGO PERUSAHAAN BAS (Ganti logo-bas.png dengan nama file gambar Anda) -->
+                <img src="logo-bas.png" alt="Logo BAS" class="h-10 w-auto bg-white rounded p-0.5">
                 <div>
                     <h1 class="font-bold text-white text-sm leading-tight">OSHE Summary Report</h1>
                     <p class="text-xs text-slate-400">PT. Berkat Anugerah Sejahtera</p>
@@ -79,7 +78,7 @@
             <div class="pt-4 px-3 py-2 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">AKSI QUICK</div>
             <button onclick="prosesSimulasiDemo()" class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30 transition">
                 <i class="fa-solid fa-bolt w-5 text-center"></i>
-                <span>Muat Data Demo</span>
+                <span>Muat Data Saja</span>
             </button>
             <button onclick="downloadRekapCSV()" class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition">
                 <i class="fa-solid fa-file-excel w-5 text-center text-emerald-400"></i>
@@ -107,8 +106,8 @@
         <header class="no-print bg-white border-b border-slate-200 px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
             <div>
                 <h1 class="text-xl md:text-2xl font-bold text-slate-900 flex items-center gap-2">
-                    Laporan Ringkasan OSHE Korporat
-                    <span class="text-xs bg-amber-100 text-amber-800 font-semibold px-2.5 py-0.5 rounded-full border border-amber-300">Safety Recall & Remidi</span>
+                    Laporan Ringkasan Oshe
+                    <span class="text-xs bg-amber-100 text-amber-800 font-semibold px-2.5 py-0.5 rounded-full border border-amber-300">Safety recall Dashboard</span>
                 </h1>
                 <p class="text-xs text-slate-500 mt-0.5">
                     Penggabungan Laporan Evaluasi Multi-Project Site — PT. Berkat Anugerah Sejahtera
