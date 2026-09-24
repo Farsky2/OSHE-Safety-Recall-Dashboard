@@ -93,10 +93,6 @@
                 <i class="fa-solid fa-file-excel w-5 text-center text-emerald-400 flex-shrink-0"></i>
                 <span class="sidebar-text transition-opacity duration-300">Download Excel/CSV</span>
             </button>
-            <button onclick="window.print()" title="Print Laporan" class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition whitespace-nowrap">
-                <i class="fa-solid fa-print w-5 text-center text-sky-400 flex-shrink-0"></i>
-                <span class="sidebar-text transition-opacity duration-300">Print</span>
-            </button>
         </nav>
 
         <!-- Sidebar Footer Quote -->
@@ -448,11 +444,9 @@
 
             window.toggleSidebar = function() {
                 if (window.innerWidth < 768) {
-                    // Mobile Drawer Toggle
                     sidebar.classList.toggle('-translate-x-full');
                     mobileOverlay.classList.toggle('hidden');
                 } else {
-                    // Desktop Mini/Expanded Toggle
                     isMini = !isMini;
                     if (isMini) {
                         collapseSidebar();
