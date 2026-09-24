@@ -40,7 +40,6 @@
 <body class="h-full flex flex-col md:flex-row text-slate-800 antialiased overflow-x-hidden">
 
     <!-- SIDEBAR NAVIGATION -->
-    <!-- Ditambahkan: id="oshe-sidebar", transition-all duration-300 -->
     <aside id="oshe-sidebar" class="no-print w-full md:w-64 bg-brand-dark text-slate-300 flex flex-col flex-shrink-0 min-h-screen transition-all duration-300 z-50 relative">
         
         <!-- Logo Header -->
@@ -61,7 +60,6 @@
         </div>
 
         <!-- Navigation Menu -->
-        <!-- Ditambahkan: whitespace-nowrap, flex-shrink-0 pada ikon, dan class "sidebar-text" -->
         <nav class="flex-1 p-4 space-y-1 overflow-y-auto overflow-x-hidden">
             <div class="sidebar-text px-3 py-2 text-[11px] font-semibold text-slate-400 uppercase tracking-wider transition-opacity duration-300">NAVIGASI</div>
             
@@ -140,16 +138,16 @@
                     <i class="fa-solid fa-chevron-down text-xs text-slate-400 hidden sm:block"></i>
                 </button>
 
-                <!-- Dropdown Menu Box -->
+                <!-- Dropdown Menu Box (Sudah Diperbaiki Link-nya) -->
                 <div id="profile-dropdown" class="hidden absolute right-0 top-full mt-1 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50 transform opacity-0 transition-all duration-200 origin-top-right">
-                    <a href="#" class="px-4 py-2 text-sm text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center gap-3 transition-colors">
+                    <a href="profil.php" class="px-4 py-2 text-sm text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center gap-3 transition-colors">
                         <i class="fa-regular fa-user w-4 text-center"></i> Profil Saya
                     </a>
-                    <a href="#" class="px-4 py-2 text-sm text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center gap-3 transition-colors">
+                    <a href="pengaturan.php" class="px-4 py-2 text-sm text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center gap-3 transition-colors">
                         <i class="fa-solid fa-gear w-4 text-center"></i> Pengaturan
                     </a>
                     <div class="border-t border-slate-100 my-1"></div>
-                    <a href="#" class="px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-3 transition-colors">
+                    <a href="logout.php" onclick="return confirm('Apakah Anda yakin ingin keluar dari sistem?')" class="px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-3 transition-colors">
                         <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center"></i> Keluar
                     </a>
                 </div>
@@ -158,7 +156,6 @@
 
         <!-- CONTENT BODY CONTAINER -->
         <div class="p-4 md:p-8 space-y-6 flex-1 max-w-7xl w-full mx-auto">
-            <!-- (Sisa kode konten utamamu dari Section 1 sampai 6 TETAP SAMA PERSIS seperti yang kamu berikan) -->
             
             <!-- STEP 1: PERIODE & PENANDATANGAN -->
             <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 md:p-6">
@@ -197,7 +194,6 @@
                     <span class="text-xs text-slate-500">Mendukung file format <b>.XLSX, .XLS, .CSV</b></span>
                 </div>
 
-                <!-- DRAG AND DROP ZONE -->
                 <div id="dropZone" class="border-2 border-dashed border-amber-300 bg-amber-50/40 hover:bg-amber-50 transition rounded-xl p-8 text-center cursor-pointer flex flex-col items-center justify-center relative">
                     <input type="file" id="fileInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                     <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mb-3 shadow-inner">
@@ -213,7 +209,6 @@
                     </div>
                 </div>
 
-                <!-- DEMO DATA TRIGGER BANNER -->
                 <div class="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-lg flex flex-col sm:flex-row items-center justify-between gap-3">
                     <div class="flex items-center gap-3 text-xs text-slate-600">
                         <i class="fa-solid fa-circle-info text-amber-500 text-base"></i>
@@ -224,7 +219,6 @@
                     </button>
                 </div>
 
-                <!-- ALERT NOTIFICATION CONTAINER -->
                 <div id="statusAlert" class="mt-4 hidden p-4 rounded-lg text-xs font-medium flex items-center gap-3"></div>
             </section>
 
@@ -238,7 +232,6 @@
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                    <!-- Total Peserta -->
                     <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
                         <div class="flex justify-between items-start">
                             <div>
@@ -253,7 +246,6 @@
                         <div class="absolute bottom-0 left-0 right-0 h-1 bg-blue-500"></div>
                     </div>
 
-                    <!-- Total Lulus -->
                     <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
                         <div class="flex justify-between items-start">
                             <div>
@@ -268,7 +260,6 @@
                         <div class="absolute bottom-0 left-0 right-0 h-1 bg-emerald-500"></div>
                     </div>
 
-                    <!-- Total Remidi -->
                     <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
                         <div class="flex justify-between items-start">
                             <div>
@@ -283,7 +274,6 @@
                         <div class="absolute bottom-0 left-0 right-0 h-1 bg-rose-500"></div>
                     </div>
 
-                    <!-- Pass Rate -->
                     <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
                         <div class="flex justify-between items-start">
                             <div>
@@ -298,7 +288,6 @@
                         <div class="absolute bottom-0 left-0 right-0 h-1 bg-amber-500"></div>
                     </div>
 
-                    <!-- Site Remidi Terbanyak -->
                     <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
                         <div class="flex justify-between items-start">
                             <div>
@@ -317,7 +306,6 @@
 
             <!-- SECTION 4: CHARTS & VISUAL ANALYTICS -->
             <section id="analisis" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Chart 1: Perbandingan Lulus vs Remidi Per Site -->
                 <div id="grafik" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
@@ -330,7 +318,6 @@
                     </div>
                 </div>
 
-                <!-- Chart 2: Distribusi Frekuensi Percobaan (Berapa Kali Remidi) -->
                 <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
@@ -354,7 +341,6 @@
                         <p class="text-xs text-slate-500">Menampilkan status kelulusan dan frekuensi mengulang (remidi)</p>
                     </div>
 
-                    <!-- TABLE EXPORT BUTTONS -->
                     <div class="flex items-center gap-2">
                         <button onclick="downloadRekapCSV()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg transition flex items-center gap-1.5 shadow-sm">
                             <i class="fa-solid fa-file-csv"></i> Export CSV
@@ -362,9 +348,7 @@
                     </div>
                 </div>
 
-                <!-- FILTERS BAR -->
                 <div class="bg-slate-50 p-4 border-b border-slate-200 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                    <!-- Search Input -->
                     <div>
                         <label class="block text-[11px] font-bold text-slate-600 mb-1">CARI NAMA / NIK</label>
                         <div class="relative">
@@ -373,7 +357,6 @@
                         </div>
                     </div>
 
-                    <!-- Site Filter -->
                     <div>
                         <label class="block text-[11px] font-bold text-slate-600 mb-1">FILTER SITE</label>
                         <select id="filterSite" onchange="applyFilters()" class="w-full text-xs bg-white border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-amber-500 focus:outline-none">
@@ -381,7 +364,6 @@
                         </select>
                     </div>
 
-                    <!-- Departemen Filter -->
                     <div>
                         <label class="block text-[11px] font-bold text-slate-600 mb-1">FILTER DEPARTEMEN</label>
                         <select id="filterDept" onchange="applyFilters()" class="w-full text-xs bg-white border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-amber-500 focus:outline-none">
@@ -389,7 +371,6 @@
                         </select>
                     </div>
 
-                    <!-- Status Filter -->
                     <div>
                         <label class="block text-[11px] font-bold text-slate-600 mb-1">FILTER STATUS KELULUSAN</label>
                         <select id="filterStatus" onchange="applyFilters()" class="w-full text-xs bg-white border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-amber-500 focus:outline-none">
@@ -401,7 +382,6 @@
                     </div>
                 </div>
 
-                <!-- MAIN DATA TABLE -->
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead>
@@ -428,11 +408,9 @@
                     </table>
                 </div>
 
-                <!-- TABLE FOOTER / PAGINATION INFO -->
                 <div class="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
                     <span id="paginationInfo">Menampilkan 0 dari 0 data</span>
                     <div class="flex items-center gap-1" id="paginationControls">
-                        <!-- Controls generated via JS -->
                     </div>
                 </div>
             </section>
@@ -474,9 +452,8 @@
             const logoFull = document.getElementById('sidebar-logo');
             const logoMini = document.getElementById('sidebar-logo-mini');
 
-            let isMini = false; // State untuk mendeteksi apakah sidebar dikunci kecil
+            let isMini = false; 
 
-            // Fungsi Membesarkan Sidebar
             function expandSidebar() {
                 sidebar.classList.remove('w-20');
                 sidebar.classList.add('md:w-64');
@@ -489,7 +466,6 @@
                 });
             }
 
-            // Fungsi Mengecilkan Sidebar (Mini Mode)
             function collapseSidebar() {
                 sidebar.classList.remove('md:w-64');
                 sidebar.classList.add('w-20');
@@ -502,7 +478,6 @@
                 });
             }
 
-            // Klik tombol hamburger
             hamburgerBtn.addEventListener('click', () => {
                 isMini = !isMini;
                 if (isMini) {
@@ -512,29 +487,23 @@
                 }
             });
 
-            // Efek Hover membesar otomatis saat dalam mode mini
             sidebar.addEventListener('mouseenter', () => {
                 if (isMini) expandSidebar();
             });
 
-            // Efek Hover mengecil kembali setelah kursor keluar
             sidebar.addEventListener('mouseleave', () => {
                 if (isMini) collapseSidebar();
             });
-
 
             // --- 2. LOGIKA DROPDOWN PROFIL TOPBAR ---
             const profileBtn = document.getElementById('profile-btn');
             const profileDropdown = document.getElementById('profile-dropdown');
 
-            // Toggle dropdown saat profil diklik
             profileBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Mencegah event merambat ke window
+                e.stopPropagation(); 
                 
-                // Toggle animasi visibility
                 if (profileDropdown.classList.contains('hidden')) {
                     profileDropdown.classList.remove('hidden');
-                    // setTimeout kecil agar animasi transform/opacity terlihat mulus oleh Tailwind
                     setTimeout(() => {
                         profileDropdown.classList.remove('opacity-0', 'scale-95');
                         profileDropdown.classList.add('opacity-100', 'scale-100');
@@ -548,7 +517,6 @@
                 }
             });
 
-            // Menutup dropdown jika user mengklik sembarang tempat di luar menu
             window.addEventListener('click', (e) => {
                 if (!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
                     profileDropdown.classList.remove('opacity-100', 'scale-100');
