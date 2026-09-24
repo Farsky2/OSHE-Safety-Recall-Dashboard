@@ -146,7 +146,7 @@ function handleFileUpload(file) {
                 };
 
                 const nama = findVal(['nama', 'employee', 'karyawan', 'name'], 'Peserta ' + (index + 1));
-                const nik = findVal(['nik', 'id', 'no', 'nrp'], 'NIK-' + (2000 + index));
+                const nik = findVal(['nik', 'nrp', 'id'], 'NIK-' + (2000 + index)); // Diperbaiki: 'no' dihapus agar tidak bentrok dengan kolom 'No'
                 const site = findVal(['site', 'lokasi', 'project', 'cabang'], 'Site Utama');
                 const dept = findVal(['dept', 'departemen', 'divisi', 'department'], 'OSHE');
                 const topik = findVal(['topik', 'materi', 'evaluasi', 'modul', 'quiz'], 'Safety Recall');
