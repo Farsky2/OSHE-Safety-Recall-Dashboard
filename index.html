@@ -40,89 +40,126 @@
 <body class="h-full flex flex-col md:flex-row text-slate-800 antialiased overflow-x-hidden">
 
     <!-- SIDEBAR NAVIGATION -->
-    <aside class="no-print w-full md:w-64 bg-brand-dark text-slate-300 flex flex-col flex-shrink-0 min-h-screen">
+    <!-- Ditambahkan: id="oshe-sidebar", transition-all duration-300 -->
+    <aside id="oshe-sidebar" class="no-print w-full md:w-64 bg-brand-dark text-slate-300 flex flex-col flex-shrink-0 min-h-screen transition-all duration-300 z-50 relative">
         
         <!-- Logo Header -->
-        <div class="p-6 bg-slate-900 border-b border-slate-800 flex flex-col items-center justify-center text-center relative">
-            <!-- Badge versi dipindah ke sudut kanan atas agar letak logo tetap presisi di tengah -->
-            <span class="absolute top-3 right-3 bg-amber-500/20 text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded border border-amber-500/30">v6.0</span>
+        <div class="p-6 bg-slate-900 border-b border-slate-800 flex flex-col items-center justify-center text-center relative overflow-hidden h-32">
+            <!-- Tampilan Logo Penuh -->
+            <div id="sidebar-logo" class="transition-opacity duration-300 flex flex-col items-center w-full">
+                <span class="absolute top-3 right-3 bg-amber-500/20 text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded border border-amber-500/30">v6.0</span>
+                <img src="Logo PT.Bas.jpg" alt="Logo BAS" class="h-14 w-auto bg-white rounded p-1.5 shadow-md">
+                <p class="mt-2 text-[10px] font-semibold text-slate-300 tracking-wide uppercase whitespace-nowrap">PT. Berkat Anugerah Sejahtera</p>
+            </div>
             
-            <!-- Logo diperbesar (h-16) dan diletakkan di tengah -->
-            <img src="Logo PT.Bas.jpg" alt="Logo BAS" class="h-16 w-auto bg-white rounded p-1.5 shadow-md">
-            
-            <!-- Teks nama perusahaan di bawah logo -->
-            <p class="mt-3 text-[11px] font-semibold text-slate-300 tracking-wide uppercase">PT. Berkat Anugerah Sejahtera</p>
+            <!-- Tampilan Logo Mini (Inisial B) -->
+            <div id="sidebar-logo-mini" class="hidden transition-opacity duration-300 absolute inset-0 flex items-center justify-center">
+                <div class="h-10 w-10 bg-amber-500 rounded-lg flex items-center justify-center text-slate-900 font-bold text-xl shadow-md">
+                    B
+                </div>
+            </div>
         </div>
 
         <!-- Navigation Menu -->
-        <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
-            <div class="px-3 py-2 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">NAVIGASI</div>
+        <!-- Ditambahkan: whitespace-nowrap, flex-shrink-0 pada ikon, dan class "sidebar-text" -->
+        <nav class="flex-1 p-4 space-y-1 overflow-y-auto overflow-x-hidden">
+            <div class="sidebar-text px-3 py-2 text-[11px] font-semibold text-slate-400 uppercase tracking-wider transition-opacity duration-300">NAVIGASI</div>
             
-            <a href="#scorecard" onclick="setActiveNav(this)" class="nav-item active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-amber-500 text-slate-950 font-semibold shadow-sm">
-                <i class="fa-solid fa-chart-pie w-5 text-center"></i>
-                <span>Scorecard</span>
+            <a href="#scorecard" onclick="setActiveNav(this)" title="Scorecard" class="nav-item active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-amber-500 text-slate-950 font-semibold shadow-sm whitespace-nowrap">
+                <i class="fa-solid fa-chart-pie w-5 text-center flex-shrink-0"></i>
+                <span class="sidebar-text transition-opacity duration-300">Scorecard</span>
             </a>
-            <a href="#analisis" onclick="setActiveNav(this)" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition">
-                <i class="fa-solid fa-chart-column w-5 text-center text-amber-400"></i>
-                <span>Analisis Site</span>
+            <a href="#analisis" onclick="setActiveNav(this)" title="Analisis Site" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition whitespace-nowrap">
+                <i class="fa-solid fa-chart-column w-5 text-center text-amber-400 flex-shrink-0"></i>
+                <span class="sidebar-text transition-opacity duration-300">Analisis Site</span>
             </a>
-            <a href="#grafik" onclick="setActiveNav(this)" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition">
-                <i class="fa-solid fa-chart-line w-5 text-center text-amber-400"></i>
-                <span>Grafik & Visual</span>
+            <a href="#grafik" onclick="setActiveNav(this)" title="Grafik & Visual" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition whitespace-nowrap">
+                <i class="fa-solid fa-chart-line w-5 text-center text-amber-400 flex-shrink-0"></i>
+                <span class="sidebar-text transition-opacity duration-300">Grafik & Visual</span>
             </a>
-            <a href="#detail" onclick="setActiveNav(this)" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition">
-                <i class="fa-solid fa-users w-5 text-center text-amber-400"></i>
-                <span>Detail Peserta & Remidi</span>
+            <a href="#detail" onclick="setActiveNav(this)" title="Detail Peserta & Remidi" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition whitespace-nowrap">
+                <i class="fa-solid fa-users w-5 text-center text-amber-400 flex-shrink-0"></i>
+                <span class="sidebar-text transition-opacity duration-300">Detail Peserta & Remidi</span>
             </a>
 
-            <div class="pt-4 px-3 py-2 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">AKSI QUICK</div>
-            <button onclick="prosesSimulasiDemo()" class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30 transition">
-                <i class="fa-solid fa-bolt w-5 text-center"></i>
-                <span>Muat Data</span>
+            <div class="sidebar-text pt-4 px-3 py-2 text-[11px] font-semibold text-slate-400 uppercase tracking-wider transition-opacity duration-300">AKSI QUICK</div>
+            
+            <button onclick="prosesSimulasiDemo()" title="Muat Data" class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30 transition whitespace-nowrap">
+                <i class="fa-solid fa-bolt w-5 text-center flex-shrink-0"></i>
+                <span class="sidebar-text transition-opacity duration-300">Muat Data</span>
             </button>
-            <button onclick="downloadRekapCSV()" class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition">
-                <i class="fa-solid fa-file-excel w-5 text-center text-emerald-400"></i>
-                <span>Download Excel/CSV</span>
+            <button onclick="downloadRekapCSV()" title="Download Excel/CSV" class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition whitespace-nowrap">
+                <i class="fa-solid fa-file-excel w-5 text-center text-emerald-400 flex-shrink-0"></i>
+                <span class="sidebar-text transition-opacity duration-300">Download Excel/CSV</span>
             </button>
-            <button onclick="window.print()" class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition">
-                <i class="fa-solid fa-print w-5 text-center text-sky-400"></i>
-                <span>Print</span>
+            <button onclick="window.print()" title="Print Laporan" class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition whitespace-nowrap">
+                <i class="fa-solid fa-print w-5 text-center text-sky-400 flex-shrink-0"></i>
+                <span class="sidebar-text transition-opacity duration-300">Print</span>
             </button>
         </nav>
 
         <!-- Sidebar Footer Quote -->
-        <div class="p-4 border-t border-slate-800 text-xs text-slate-400 bg-slate-900/50">
-            <p class="font-medium text-amber-400 flex items-center gap-1.5 mb-1">
-                <i class="fa-solid fa-shield-halved"></i> OSHE Department
+        <div class="p-4 border-t border-slate-800 text-xs text-slate-400 bg-slate-900/50 flex flex-col items-center md:items-start overflow-hidden whitespace-nowrap">
+            <p class="font-medium text-amber-400 flex items-center gap-2 mb-1">
+                <i class="fa-solid fa-shield-halved flex-shrink-0"></i> 
+                <span class="sidebar-text transition-opacity duration-300">OSHE Department</span>
             </p>
-            <p class="text-[11px]">Evaluasi Safety Recall Periode 2026</p>
+            <p class="sidebar-text text-[10px] transition-opacity duration-300">Evaluasi Safety Recall 2026</p>
         </div>
     </aside>
 
     <!-- MAIN CONTENT AREA -->
-    <main class="flex-1 flex flex-col min-w-0 bg-slate-100 min-h-screen">
+    <main class="flex-1 flex flex-col min-w-0 bg-slate-100 min-h-screen relative">
         
         <!-- TOP HEADER BAR -->
-        <header class="no-print bg-white border-b border-slate-200 px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
-            <div>
-                <h1 class="text-xl md:text-2xl font-bold text-slate-900 flex items-center gap-2">
-                    Laporan Ringkasan Oshe
-                    <span class="text-xs bg-amber-100 text-amber-800 font-semibold px-2.5 py-0.5 rounded-full border border-amber-300">Safety recall Dashboard</span>
-                </h1>
-                <p class="text-xs text-slate-500 mt-0.5">
-                    Penggabungan Laporan Evaluasi Multi-Project Site — PT. Berkat Anugerah Sejahtera
-                </p>
+        <header class="no-print bg-white border-b border-slate-200 px-4 md:px-6 py-3 flex items-center justify-between shadow-sm sticky top-0 z-40">
+            <div class="flex items-center gap-4">
+                <!-- Tombol Hamburger -->
+                <button id="hamburger-btn" class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-amber-600 focus:outline-none transition-colors">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                
+                <div class="hidden sm:block">
+                    <h1 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        Laporan Ringkasan Oshe
+                        <span class="text-[10px] bg-amber-100 text-amber-800 font-semibold px-2 py-0.5 rounded-full border border-amber-300">Dashboard</span>
+                    </h1>
+                </div>
             </div>
-            <div class="flex items-center gap-3 self-end md:self-auto">
-                <div class="text-right">
-                    <p class="text-xs font-bold text-slate-800">Farid Kasyfil Aziz</p>
+            
+            <!-- Profil Dropdown -->
+            <div class="flex items-center gap-3 relative">
+                <button id="profile-btn" class="flex items-center gap-3 focus:outline-none hover:bg-slate-50 p-1.5 rounded-lg transition-colors border border-transparent hover:border-slate-200">
+                    <div class="text-right hidden md:block">
+                        <p class="text-xs font-bold text-slate-800">Farid Kasyfil Aziz</p>
+                        <p class="text-[10px] font-medium text-slate-500">Administrator</p>
+                    </div>
+                    <div class="h-9 w-9 rounded-full bg-slate-800 flex items-center justify-center text-amber-400 font-bold border-2 border-white shadow-sm text-sm">
+                        FA
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-xs text-slate-400 hidden sm:block"></i>
+                </button>
+
+                <!-- Dropdown Menu Box -->
+                <div id="profile-dropdown" class="hidden absolute right-0 top-full mt-1 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50 transform opacity-0 transition-all duration-200 origin-top-right">
+                    <a href="#" class="px-4 py-2 text-sm text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center gap-3 transition-colors">
+                        <i class="fa-regular fa-user w-4 text-center"></i> Profil Saya
+                    </a>
+                    <a href="#" class="px-4 py-2 text-sm text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center gap-3 transition-colors">
+                        <i class="fa-solid fa-gear w-4 text-center"></i> Pengaturan
+                    </a>
+                    <div class="border-t border-slate-100 my-1"></div>
+                    <a href="#" class="px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-3 transition-colors">
+                        <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center"></i> Keluar
+                    </a>
                 </div>
             </div>
         </header>
 
         <!-- CONTENT BODY CONTAINER -->
         <div class="p-4 md:p-8 space-y-6 flex-1 max-w-7xl w-full mx-auto">
-
+            <!-- (Sisa kode konten utamamu dari Section 1 sampai 6 TETAP SAMA PERSIS seperti yang kamu berikan) -->
+            
             <!-- STEP 1: PERIODE & PENANDATANGAN -->
             <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 md:p-6">
                 <div class="flex items-center gap-2 mb-4">
@@ -424,8 +461,105 @@
         </div>
     </main>
 
-    <!-- Menghubungkan file JavaScript Eksternal -->
+    <!-- Menghubungkan file JavaScript Eksternal milikmu -->
     <script src="script.js"></script>
+
+    <!-- SCRIPT TAMBAHAN: Logika UI (Hamburger, Hover Sidebar, Profil Dropdown) -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // --- 1. LOGIKA MINI SIDEBAR (HAMBURGER & HOVER) ---
+            const sidebar = document.getElementById('oshe-sidebar');
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const sidebarTexts = document.querySelectorAll('.sidebar-text');
+            const logoFull = document.getElementById('sidebar-logo');
+            const logoMini = document.getElementById('sidebar-logo-mini');
+
+            let isMini = false; // State untuk mendeteksi apakah sidebar dikunci kecil
+
+            // Fungsi Membesarkan Sidebar
+            function expandSidebar() {
+                sidebar.classList.remove('w-20');
+                sidebar.classList.add('md:w-64');
+                
+                logoFull.classList.remove('hidden');
+                logoMini.classList.add('hidden');
+                
+                sidebarTexts.forEach(text => {
+                    text.classList.remove('opacity-0', 'hidden');
+                });
+            }
+
+            // Fungsi Mengecilkan Sidebar (Mini Mode)
+            function collapseSidebar() {
+                sidebar.classList.remove('md:w-64');
+                sidebar.classList.add('w-20');
+                
+                logoFull.classList.add('hidden');
+                logoMini.classList.remove('hidden');
+                
+                sidebarTexts.forEach(text => {
+                    text.classList.add('opacity-0', 'hidden');
+                });
+            }
+
+            // Klik tombol hamburger
+            hamburgerBtn.addEventListener('click', () => {
+                isMini = !isMini;
+                if (isMini) {
+                    collapseSidebar();
+                } else {
+                    expandSidebar();
+                }
+            });
+
+            // Efek Hover membesar otomatis saat dalam mode mini
+            sidebar.addEventListener('mouseenter', () => {
+                if (isMini) expandSidebar();
+            });
+
+            // Efek Hover mengecil kembali setelah kursor keluar
+            sidebar.addEventListener('mouseleave', () => {
+                if (isMini) collapseSidebar();
+            });
+
+
+            // --- 2. LOGIKA DROPDOWN PROFIL TOPBAR ---
+            const profileBtn = document.getElementById('profile-btn');
+            const profileDropdown = document.getElementById('profile-dropdown');
+
+            // Toggle dropdown saat profil diklik
+            profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Mencegah event merambat ke window
+                
+                // Toggle animasi visibility
+                if (profileDropdown.classList.contains('hidden')) {
+                    profileDropdown.classList.remove('hidden');
+                    // setTimeout kecil agar animasi transform/opacity terlihat mulus oleh Tailwind
+                    setTimeout(() => {
+                        profileDropdown.classList.remove('opacity-0', 'scale-95');
+                        profileDropdown.classList.add('opacity-100', 'scale-100');
+                    }, 10);
+                } else {
+                    profileDropdown.classList.remove('opacity-100', 'scale-100');
+                    profileDropdown.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => {
+                        profileDropdown.classList.add('hidden');
+                    }, 200);
+                }
+            });
+
+            // Menutup dropdown jika user mengklik sembarang tempat di luar menu
+            window.addEventListener('click', (e) => {
+                if (!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+                    profileDropdown.classList.remove('opacity-100', 'scale-100');
+                    profileDropdown.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => {
+                        profileDropdown.classList.add('hidden');
+                    }, 200);
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
