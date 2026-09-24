@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSHE Dashboard - PT. Berkat Anugerah Sejahtera</title>
+    
+    <!-- Menghubungkan file CSS Eksternal -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Script Konfigurasi Tailwind (Harus tetap di HTML untuk pengaturan warna kustom CDN) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0F172A',
+                            sidebar: '#1E293B',
+                            orange: '#F59E0B',
+                            orangeHover: '#D97706',
+                            accent: '#EA580C'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- SheetJS CDN for parsing Excel files -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- Chart.js CDN for visual analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="h-full flex flex-col md:flex-row text-slate-800 antialiased overflow-x-hidden">
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="no-print w-full md:w-64 bg-brand-dark text-slate-300 flex flex-col flex-shrink-0 min-h-screen">
+        <!-- Logo Header -->
+        <div class="p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-amber-400 text-slate-950 font-black text-xl px-2.5 py-1 rounded shadow tracking-wider border border-amber-300">
+                    BAS
+                </div>
+                <div>
+                    <h1 class="font-bold text-white text-sm leading-tight">OSHE Summary Report</h1>
+                    <p class="text-xs text-slate-400">PT. Berkat Anugerah Sejahtera</p>
+                </div>
+            </div>
+            <span class="bg-amber-500/20 text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded border border-amber-500/30">v6.0</span>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+            <div class="px-3 py-2 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">NAVIGASI</div>
+            
+            <a href="#scorecard" onclick="setActiveNav(this)" class="nav-item active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-amber-500 text-slate-950 font-semibold shadow-sm">
+                <i class="fa-solid fa-chart-pie w-5 text-center"></i>
+                <span>Scorecard</span>
+            </a>
+            <a href="#analisis" onclick="setActiveNav(this)" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition">
+                <i class="fa-solid fa-chart-column w-5 text-center text-amber-400"></i>
+                <span>Analisis Site</span>
+            </a>
+            <a href="#grafik" onclick="setActiveNav(this)" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition">
+                <i class="fa-solid fa-chart-line w-5 text-center text-amber-400"></i>
+                <span>Grafik & Visual</span>
+            </a>
+            <a href="#detail" onclick="setActiveNav(this)" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition">
+                <i class="fa-solid fa-users w-5 text-center text-amber-400"></i>
+                <span>Detail Peserta & Remidi</span>
+            </a>
+
+            <div class="pt-4 px-3 py-2 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">AKSI QUICK</div>
+            <button onclick="prosesSimulasiDemo()" class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30 transition">
+                <i class="fa-solid fa-bolt w-5 text-center"></i>
+                <span>Muat Data Demo</span>
+            </button>
+            <button onclick="downloadRekapCSV()" class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition">
+                <i class="fa-solid fa-file-excel w-5 text-center text-emerald-400"></i>
+                <span>Download Excel/CSV</span>
+            </button>
+            <button onclick="window.print()" class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition">
+                <i class="fa-solid fa-print w-5 text-center text-sky-400"></i>
+                <span>Print Scorecard</span>
+            </button>
+        </nav>
+
+        <!-- Sidebar Footer Quote -->
+        <div class="p-4 border-t border-slate-800 text-xs text-slate-400 bg-slate-900/50">
+            <p class="font-medium text-amber-400 flex items-center gap-1.5 mb-1">
+                <i class="fa-solid fa-shield-halved"></i> OSHE Department
+            </p>
+            <p class="text-[11px]">Evaluasi Safety Recall Periode 2026</p>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 flex flex-col min-w-0 bg-slate-100 min-h-screen">
+        
+        <!-- TOP HEADER BAR -->
+        <header class="no-print bg-white border-b border-slate-200 px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold text-slate-900 flex items-center gap-2">
+                    Laporan Ringkasan OSHE Korporat
+                    <span class="text-xs bg-amber-100 text-amber-800 font-semibold px-2.5 py-0.5 rounded-full border border-amber-300">Safety Recall & Remidi</span>
+                </h1>
+                <p class="text-xs text-slate-500 mt-0.5">
+                    Penggabungan Laporan Evaluasi Multi-Project Site — PT. Berkat Anugerah Sejahtera
+                </p>
+            </div>
+            <div class="flex items-center gap-3 self-end md:self-auto">
+                <div class="text-right">
+                    <p class="text-xs font-bold text-slate-800">Farid Kasyfil Aziz</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENT BODY CONTAINER -->
+        <div class="p-4 md:p-8 space-y-6 flex-1 max-w-7xl w-full mx-auto">
+
+            <!-- STEP 1: PERIODE & PENANDATANGAN -->
+            <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 md:p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="bg-amber-500 text-slate-950 text-xs font-black px-2 py-0.5 rounded uppercase">Langkah 1</span>
+                    <h2 class="font-bold text-slate-800 text-sm md:text-base">PERIODE EVALUASI & PENANDATANGAN LAPORAN</h2>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">PERIODE DARI</label>
+                        <input type="date" id="inputPeriodeDari" value="2026-06-01" class="w-full text-xs font-medium bg-slate-50 border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">PERIODE SAMPAI</label>
+                        <input type="date" id="inputPeriodeSampai" value="2026-06-30" class="w-full text-xs font-medium bg-slate-50 border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">PENANDATANGAN — OSHE</label>
+                        <input type="text" id="inputPenandatanganOSHE" value="M. Harris Domili" class="w-full text-xs font-medium bg-slate-50 border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">PENANDATANGAN — MENGETAHUI</label>
+                        <input type="text" id="inputPenandatanganGM" value="Nama General Manager" placeholder="Contoh: Budi Santoso" class="w-full text-xs font-medium bg-slate-50 border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 2: UPLOAD FILE LAPORAN EXCEL -->
+            <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 md:p-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-amber-500 text-slate-950 text-xs font-black px-2 py-0.5 rounded uppercase">Langkah 2</span>
+                        <h2 class="font-bold text-slate-800 text-sm md:text-base">UPLOAD FILE LAPORAN EXCEL (MULTI-SITE)</h2>
+                    </div>
+                    <span class="text-xs text-slate-500">Mendukung file format <b>.XLSX, .XLS, .CSV</b></span>
+                </div>
+
+                <!-- DRAG AND DROP ZONE -->
+                <div id="dropZone" class="border-2 border-dashed border-amber-300 bg-amber-50/40 hover:bg-amber-50 transition rounded-xl p-8 text-center cursor-pointer flex flex-col items-center justify-center relative">
+                    <input type="file" id="fileInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                    <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mb-3 shadow-inner">
+                        <i class="fa-solid fa-file-excel text-2xl"></i>
+                    </div>
+                    <p class="text-sm font-bold text-slate-800">Klik atau drop file Excel di sini</p>
+                    <p class="text-xs text-slate-500 mt-1 max-w-md">
+                        Sistem akan otomatis membaca data NIK, Nama, Site, Departemen, Skor Evaluasi, dan Jumlah Percobaan Remidi dari seluruh sheet.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2 justify-center">
+                        <span class="text-[11px] bg-slate-200 text-slate-700 font-semibold px-2.5 py-1 rounded">Format Otomatis Parsed</span>
+                        <span class="text-[11px] bg-emerald-100 text-emerald-800 font-semibold px-2.5 py-1 rounded">Mendukung Multi-Sheet</span>
+                    </div>
+                </div>
+
+                <!-- DEMO DATA TRIGGER BANNER -->
+                <div class="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-lg flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 text-xs text-slate-600">
+                        <i class="fa-solid fa-circle-info text-amber-500 text-base"></i>
+                        <span>Belum menyiapkan file Excel? Gunakan dataset simulasi untuk mencoba semua fitur dashboard.</span>
+                    </div>
+                    <button onclick="prosesSimulasiDemo()" class="whitespace-nowrap px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-lg shadow transition flex items-center gap-2">
+                        <i class="fa-solid fa-play"></i> Gunakan Data Demo
+                    </button>
+                </div>
+
+                <!-- ALERT NOTIFICATION CONTAINER -->
+                <div id="statusAlert" class="mt-4 hidden p-4 rounded-lg text-xs font-medium flex items-center gap-3"></div>
+            </section>
+
+            <!-- SECTION 3: KEY METRICS SCORECARD -->
+            <section id="scorecard" class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-gauge-high text-amber-500"></i> Ringkasan Indicators OSHE (Scorecard)
+                    </h2>
+                    <span id="labelTotalRecords" class="text-xs text-slate-500 font-medium">Data Terisi: 0 Peserta</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <!-- Total Peserta -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">TOTAL PESERTA</p>
+                                <h3 id="statTotalPeserta" class="text-2xl font-black text-slate-900 mt-1">0</h3>
+                            </div>
+                            <div class="p-2.5 bg-blue-50 text-blue-600 rounded-lg">
+                                <i class="fa-solid fa-users text-lg"></i>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-2">Seluruh site terdaftar</p>
+                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-blue-500"></div>
+                    </div>
+
+                    <!-- Total Lulus -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">LULUS EVALUASI</p>
+                                <h3 id="statTotalLulus" class="text-2xl font-black text-emerald-600 mt-1">0</h3>
+                            </div>
+                            <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg">
+                                <i class="fa-solid fa-circle-check text-lg"></i>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-emerald-600 font-medium mt-2">Skor ≥ 80%</p>
+                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-emerald-500"></div>
+                    </div>
+
+                    <!-- Total Remidi -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">PERNAH REMIDI</p>
+                                <h3 id="statTotalRemidi" class="text-2xl font-black text-rose-600 mt-1">0</h3>
+                            </div>
+                            <div class="p-2.5 bg-rose-50 text-rose-600 rounded-lg">
+                                <i class="fa-solid fa-rotate-right text-lg"></i>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-rose-500 font-medium mt-2">Mengulang ≥ 1x Ujian</p>
+                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-rose-500"></div>
+                    </div>
+
+                    <!-- Pass Rate -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">TINGKAT KELULUSAN</p>
+                                <h3 id="statPassRate" class="text-2xl font-black text-amber-600 mt-1">0%</h3>
+                            </div>
+                            <div class="p-2.5 bg-amber-50 text-amber-600 rounded-lg">
+                                <i class="fa-solid fa-percent text-lg"></i>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-2">Rasio Lulus vs Remidi</p>
+                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-amber-500"></div>
+                    </div>
+
+                    <!-- Site Remidi Terbanyak -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">REMIDI TERBANYAK</p>
+                                <h3 id="statSiteRemidiTop" class="text-base font-bold text-slate-800 mt-1 truncate max-w-[120px]">-</h3>
+                            </div>
+                            <div class="p-2.5 bg-purple-50 text-purple-600 rounded-lg">
+                                <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                            </div>
+                        </div>
+                        <p id="statSiteRemidiCount" class="text-[11px] text-purple-600 font-medium mt-2">0 Peserta Remidi</p>
+                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-purple-500"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: CHARTS & VISUAL ANALYTICS -->
+            <section id="analisis" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Chart 1: Perbandingan Lulus vs Remidi Per Site -->
+                <div id="grafik" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-chart-bar text-amber-500"></i> Perbandingan Lulus & Remidi Per Site
+                        </h3>
+                        <span class="text-[11px] text-slate-400">Total Karyawan</span>
+                    </div>
+                    <div class="h-64 relative">
+                        <canvas id="chartSiteComparison"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Distribusi Frekuensi Percobaan (Berapa Kali Remidi) -->
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-amber-500"></i> Sebaran Frekuensi Percobaan Ujian
+                        </h3>
+                        <span class="text-[11px] text-slate-400">Kali Remidi</span>
+                    </div>
+                    <div class="h-64 relative">
+                        <canvas id="chartRemidiCount"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: DATA TABLE & FILTERING -->
+            <section id="detail" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-5 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="font-bold text-slate-800 text-sm md:text-base flex items-center gap-2">
+                            <i class="fa-solid fa-table-list text-amber-500"></i> Detail Rekapitulasi Peserta Evaluasi Safety
+                        </h2>
+                        <p class="text-xs text-slate-500">Menampilkan status kelulusan dan frekuensi mengulang (remidi)</p>
+                    </div>
+
+                    <!-- TABLE EXPORT BUTTONS -->
+                    <div class="flex items-center gap-2">
+                        <button onclick="downloadRekapCSV()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-file-csv"></i> Export CSV
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FILTERS BAR -->
+                <div class="bg-slate-50 p-4 border-b border-slate-200 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                    <!-- Search Input -->
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 mb-1">CARI NAMA / NIK</label>
+                        <div class="relative">
+                            <input type="text" id="filterSearch" oninput="applyFilters()" placeholder="Ketik nama atau NIK..." class="w-full text-xs bg-white border border-slate-300 rounded-lg pl-8 pr-3 py-2 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
+                        </div>
+                    </div>
+
+                    <!-- Site Filter -->
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 mb-1">FILTER SITE</label>
+                        <select id="filterSite" onchange="applyFilters()" class="w-full text-xs bg-white border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                            <option value="ALL">Semua Site</option>
+                        </select>
+                    </div>
+
+                    <!-- Departemen Filter -->
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 mb-1">FILTER DEPARTEMEN</label>
+                        <select id="filterDept" onchange="applyFilters()" class="w-full text-xs bg-white border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                            <option value="ALL">Semua Departemen</option>
+                        </select>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 mb-1">FILTER STATUS KELULUSAN</label>
+                        <select id="filterStatus" onchange="applyFilters()" class="w-full text-xs bg-white border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                            <option value="ALL">Semua Status</option>
+                            <option value="Lulus Langsung">Lulus (Tanpa Remidi)</option>
+                            <option value="Lulus Setelah Remidi">Lulus (Setelah Remidi)</option>
+                            <option value="Belum Lulus / Remidi">Masih Remidi (&lt;80%)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- MAIN DATA TABLE -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200 uppercase tracking-wider">
+                                <th class="py-3 px-4">No</th>
+                                <th class="py-3 px-4">NIK</th>
+                                <th class="py-3 px-4">Nama Peserta</th>
+                                <th class="py-3 px-4">Site</th>
+                                <th class="py-3 px-4">Departemen</th>
+                                <th class="py-3 px-4">Topik Evaluasi</th>
+                                <th class="py-3 px-4 text-center">Skor Akhir</th>
+                                <th class="py-3 px-4 text-center">Frekuensi Ujian</th>
+                                <th class="py-3 px-4 text-center">Status Kelulusan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="divide-y divide-slate-200">
+                            <tr>
+                                <td colspan="9" class="py-8 text-center text-slate-400">
+                                    <i class="fa-solid fa-folder-open text-3xl mb-2 block text-slate-300"></i>
+                                    Belum ada data loaded. Silakan unggah file Excel atau klik <b>"Gunakan Data Demo"</b>.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TABLE FOOTER / PAGINATION INFO -->
+                <div class="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+                    <span id="paginationInfo">Menampilkan 0 dari 0 data</span>
+                    <div class="flex items-center gap-1" id="paginationControls">
+                        <!-- Controls generated via JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 6: PRINT SIGNATURE VIEW (Appears on print view) -->
+            <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-6">
+                <div class="text-center border-b pb-4">
+                    <h3 class="font-bold text-slate-900 text-base">RINGKASAN PERSETUJUAN DOKUMEN EVALUASI SAFETY</h3>
+                    <p class="text-xs text-slate-500">PT. Berkat Anugerah Sejahtera — OSHE Department</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-8 pt-4 text-center text-xs">
+                    <div>
+                        <p class="text-slate-500 mb-12">Disiapkan Oleh (OSHE Dept):</p>
+                        <p id="signNameOSHE" class="font-bold text-slate-900 border-b border-slate-800 inline-block pb-1 min-w-[180px]">M. Harris Domili</p>
+                        <p class="text-slate-400 text-[10px] mt-1">OSHE Representative</p>
+                    </div>
+                    <div>
+                        <p class="text-slate-500 mb-12">Mengetahui (Management):</p>
+                        <p id="signNameGM" class="font-bold text-slate-900 border-b border-slate-800 inline-block pb-1 min-w-[180px]">Nama General Manager</p>
+                        <p class="text-slate-400 text-[10px] mt-1">General Manager</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Menghubungkan file JavaScript Eksternal -->
+    <script src="script.js"></script>
+
+</body>
+</html>
